@@ -1,3 +1,5 @@
 FROM puckel/docker-airflow
-COPY MIAdags ${AIRFLOW_HOME}/dags
-CMD ["webserver"] # set default arg for entrypoint
+COPY MIAcode ${AIRFLOW_HOME}/dags
+COPY tests.py ${AIRFLOW_HOME}/tests.py
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "./tests.py"] 
