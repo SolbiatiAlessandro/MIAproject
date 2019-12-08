@@ -83,5 +83,6 @@ async def main(
 
 if __name__=="__main__":
     logging.basicConfig(level=logging.INFO)
-    asyncio.get_event_loop().run_until_complete(main())
+    res = asyncio.get_event_loop().run_until_complete(main())
+    print(res)
 
