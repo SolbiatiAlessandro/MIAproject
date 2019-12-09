@@ -1,6 +1,12 @@
 # MIAproject
 [Documentation and planning on Google Drive](https://drive.google.com/drive/u/0/folders/1V1NssYnWEfVgc56QZ-cNgpiYI1BKUL-E)
 
+## COMMANDS
+```
+docker build -t mia .
+docker run -d -p 8080:8080 mia webserver
+```
+
 ## INFRA
 - docker
 - airflow
