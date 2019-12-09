@@ -71,7 +71,7 @@ async def main(
             "!!channel {} not implemented".format(channel_name)
     channel_hash = CHANNEL_HASH_MAP[channel_name]
     logging.info("starting headless chromium")
-    browser = await launch(headless=True)
+    browser = await launch(headless=True, args=['--no-sandbox'])
     page = await browser.newPage()
     url = "https://www.youtube.com/channel/{}/videos?view=0&sort=p&flow=list".format(
             channel_hash)
