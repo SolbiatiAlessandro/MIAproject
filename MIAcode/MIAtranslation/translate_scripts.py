@@ -30,7 +30,7 @@ def translate_scripts(**kwargs) -> List[str]:
     # in the translated language
     translated_video_scripts_filenames = []
 
-    for title, link in enumerate(untranslated_videos):
+    for title, link in untranslated_videos:
         keyword_from_title = title_to_keyword(title)
         video_script_name = generate_wiki_text(keyword_from_title)
         translated_video_scripts_filenames.append(video_script_name)
@@ -39,4 +39,5 @@ def translate_scripts(**kwargs) -> List[str]:
     #        'translated_scripts_1.miascript',
     #       'translated_scripts_2.miascript',
     #       ]
+    logging.info(translated_video_scripts_filenames)
     return translated_video_scripts_filenames
