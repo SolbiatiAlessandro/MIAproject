@@ -7,6 +7,7 @@ from time import sleep
 # AIRFLOW IMPORTS
 import requests
 from airflow import DAG
+from airflow.models import Variable
 from airflow.operators.email_operator import EmailOperator
 from airflow.operators.python_operator import PythonOperator
 
@@ -33,6 +34,12 @@ with DAG('youtube_translation_encyclopedia',
          default_args=default_args,
          schedule_interval='* * * * *', # every minute
          ) as dag:
+
+    ## SET VARIABLES (alex) I am not sure if this is the right place
+    Variable.set("youtube_translation_encyclopedia_BATCH_START", 0)
+    Variable.set("youtube_translation_encyclopedia_BATCH_SIZE", 100)
+
+    ## DECLARE OPERATORS
     opr_scrape_untranslated_videos = PythonOperator(
             task_id='scrape_untranslated_videos',
             python_callable=scrape_untranslated_videos, 
