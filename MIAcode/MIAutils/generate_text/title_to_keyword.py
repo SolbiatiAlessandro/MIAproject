@@ -3,6 +3,7 @@ from typing import Optional
 
 def title_to_keyword(input_yt_title: str) -> Optional[str]:
     #input_yt_title
+    #import pdb;pdb.set_trace()
     re_match_pattern1 = re.search('(?<=is )(.*)(?=\? What)', input_yt_title)
     re_match_pattern2 = re.search('(?<=does )(.*)(?= mean\?)', input_yt_title)
     

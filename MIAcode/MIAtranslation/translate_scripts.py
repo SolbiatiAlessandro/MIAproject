@@ -5,6 +5,10 @@ some ideas here
 """
 from typing import List, Tuple
 import logging
+import sys
+sys.path.append("../")
+from MIAutils.generate_text.generate_wiki_text import generate_wiki_text
+from MIAutils.generate_text.title_to_keyword import title_to_keyword 
 
 def translate_scripts(**kwargs) -> List[str]:
     """
@@ -24,9 +28,15 @@ def translate_scripts(**kwargs) -> List[str]:
     # we should figure out how to translate the video name and
     # to get the link of the source script (wikipedia, dictionary)
     # in the translated language
+    translated_video_scripts_filenames = []
 
-    translated_video_scripts_filenames = [
-            'translated_scripts_1.miascript',
-            'translated_scripts_2.miascript',
-            ]
+    for title, link in enumerate(untranslated_videos):
+        keyword_from_title = title_to_keyword(title)
+        video_script_name = generate_wiki_text(keyword_from_title)
+        translated_video_scripts_filenames.append(video_script_name)
+
+    #translated_video_scripts_filenames = [
+    #        'translated_scripts_1.miascript',
+    #       'translated_scripts_2.miascript',
+    #       ]
     return translated_video_scripts_filenames
