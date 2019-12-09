@@ -3,7 +3,9 @@ USER root
 COPY MIAcode ${AIRFLOW_HOME}/dags
 COPY tests.py ${AIRFLOW_HOME}/tests.py
 COPY MIAcode/MIAutils/scraper/requirements.txt ${AIRFLOW_HOME}/scraper_requirements.txt
+COPY MIAcode/MIAutils/generate_text/requirements.txt ${AIRFLOW_HOME}/generate_text_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/scraper_requirements.txt
+RUN pip install -r ${AIRFLOW_HOME}/generate_text_requirements.txt
 # INSTALL CHROMIUM
 RUN pyppeteer-install
 # GET CHROMIUM LIBRARIES
