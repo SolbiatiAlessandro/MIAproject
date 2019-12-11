@@ -18,9 +18,6 @@ def create_textfile(filepath: str, text: str) -> None:
     f.close()
 
 def generate_wiki_text(input_keyword: str) -> None:
-    # here the function return None in case 
-    # there is not a wiki page or a wiki page
-    # in Spanish for the specified keyword
 
     logging.warning("called generate_wiki_text with input_keyword={}".format(input_keyword))
     wiki_wiki = wikipediaapi.Wikipedia('en')
