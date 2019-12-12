@@ -15,6 +15,7 @@ def title_to_keyword(input_yt_title: str) -> Optional[str]:
         return
 
     keyword = re_match.group(0)
+    keyword = lower(keyword)
     no_spaces_keyword = keyword.replace(' ', '_')
     return no_spaces_keyword
 
