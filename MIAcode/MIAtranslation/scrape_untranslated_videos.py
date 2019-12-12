@@ -17,6 +17,9 @@ def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
     returns [[video_name_EN, video_link]]
     """
 
+    # TODO: variables are encrpyted, use this snippet to decrpit
+    # https://stackoverflow.com/questions/49074060/airflow-encrypted-variables
+
     BATCH_SIZE  = int(Variable.get("youtube_translation_encyclopedia_BATCH_SIZE"))
     BATCH_START = int(Variable.get("youtube_translation_encyclopedia_BATCH_START"))
     logging.info(BATCH_SIZE)
