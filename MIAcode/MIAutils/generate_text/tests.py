@@ -21,7 +21,7 @@ def test_generate_sp_script_files_from_en_video_titles():
     #create filenames for tests
     here = os.path.dirname(os.path.realpath(__file__))
     subdir = 'Text Files'
-    keyword1 = 'Entrepreneurship.txt'
+    keyword1 = 'entrepreneurship.txt'
     filename1 = os.path.join(here, subdir, keyword1)
 
     assert translated_video_scripts_filenames ==  [filename1, None]

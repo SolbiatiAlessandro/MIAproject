@@ -6,8 +6,6 @@ COPY MIAcode/MIAutils/scraper/requirements.txt ${AIRFLOW_HOME}/scraper_requireme
 COPY MIAcode/MIAutils/generate_text/requirements.txt ${AIRFLOW_HOME}/generate_text_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/scraper_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/generate_text_requirements.txt
-# INSTALL CHROMIUM
-RUN pyppeteer-install
 # GET CHROMIUM LIBRARIES
 RUN  apt-get update \
      # (alex) added by me to make chromium work from airflow base
@@ -23,5 +21,7 @@ RUN  apt-get update \
      && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
      && chmod +x /usr/sbin/wait-for-it.sh
 USER airflow
+# INSTALL CHROMIUM
+RUN pyppeteer-install
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["python", "./tests.py"] 
