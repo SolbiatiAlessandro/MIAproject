@@ -29,25 +29,27 @@ default_args = {
     'retries': 0
 }
 
-BATCH_START = "youtube_translation_encyclopedia_BATCH_START"
-BATCH_SIZE = "youtube_translation_encyclopedia_BATCH_SIZE"
+BATCH_VARIABLE_NAMES = [
+    "youtube_translation_encyclopedia_BATCH_SIZE",
+    "youtube_translation_encyclopedia_BATCH_START"
+]
 
-def set_variable(variable_name, variable_val):
+def set_variable(variable_key, variable_val):
     """
     workaround for 
         sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) 
         UNIQUE constraint failed: variable.key
     """
-    presence = Variable.get(variable_name, default_var=None)
-    if presence is None:
-        Variable.set(variable_name, variable_val)
+    variable = Variable.get(variable_key)
+    variable._val = variable_val
+    variable.is_encrypted = False
 
 def set_variables(
         batch_start = 0, 
-        batch_size = 100
+        batch_size = 30
         ):
-    set_variable(BATCH_START, batch_start)
-    set_variable(BATCH_SIZE, batch_size)
+    set_variable(BATCH_VARIABLE_NAMES[1], batch_start)
+    set_variable(BATCH_VARIABLE_NAMES[0], batch_size)
 
 with DAG('youtube_translation_encyclopedia',
          catchup=False,
@@ -56,6 +58,7 @@ with DAG('youtube_translation_encyclopedia',
          ) as dag:
 
     ## SET VARIABLES (alex) I am not sure if this is the right place
+    set_variables()
 
     ## DECLARE OPERATORS
     opr_scrape_untranslated_videos = PythonOperator(

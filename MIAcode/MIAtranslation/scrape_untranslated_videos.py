@@ -11,34 +11,36 @@ import MIAutils.scraper.youtube_top_videos as scraper
 from typing import List, Tuple
 import asyncio
 from airflow.models import Variable
+from youtube_translation_encyclopedia import BATCH_VARIABLE_NAMES
+
 
 def get_batch_variables():
-    # TODO: variables are encrpyted, use this snippet to decrpit
-    # https://stackoverflow.com/questions/49074060/airflow-encrypted-variables
+    # TODO: this stuff is not documented, might want to write
+    # docs and push to airflow/answer SOF questions
+    return [Variable.get(variable_name).get_val() \
+                    for variable_name in BATCH_VARIABLE_NAMES]
 
-    BATCH_SIZE  = int(Variable.get("youtube_translation_encyclopedia_BATCH_SIZE"))
-    BATCH_START = int(Variable.get("youtube_translation_encyclopedia_BATCH_START"))
-    logging.info(BATCH_SIZE)
-    logging.info(BATCH_START)
-
-def update_batch_variables():
-    # TODO: this probably is not persistent when you quit the session
-    # updating batch start
-    BATCH_START += BATCH_SIZE
-    Variable.set("youtube_translation_encyclopedia_BATCH_START", 
-            BATCH_START)
+def update_batch_variables(
+        batch_size, batch_start
+        ):
+    #TODO: probably this is not persistent
+    Variable.get(BATCH_VARIABLE_NAMES[0]).set_val(batch_size)
+    Variable.get(BATCH_VARIABLE_NAMES[1]).set_val(batch_start)
 
 def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
     """
     returns [[video_name_EN, video_link]]
     """
 
+    batch_size, batch_start = get_batch_variables()
+
     # hack on how to get out of the async loop, scraper is an awaitable
     untranslated_videos: List[scraper.Title] = asyncio.get_event_loop().run_until_complete(
             scraper.main(
-                batch_size=500,
-                batch_start=0
+                batch_size=batch_size,
+                batch_start=batch_start
                 )
             )
 
+    update_batch_variables(batch_size, batch_start + batch_size)
     return untranslated_videos
