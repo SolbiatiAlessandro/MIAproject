@@ -36,7 +36,7 @@ def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
     # hack on how to get out of the async loop, scraper is an awaitable
     untranslated_videos: List[scraper.Title] = asyncio.get_event_loop().run_until_complete(
             scraper.main(
-                batch_size=500,
+                batch_size=100,
                 batch_start=0
                 )
             )
