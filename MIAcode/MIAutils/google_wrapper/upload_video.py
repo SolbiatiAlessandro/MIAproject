@@ -170,6 +170,7 @@ if __name__ == '__main__':
   if not os.path.exists(args.file):
     exit("Please specify a valid file using the --file= parameter.")
 
+  import pdb;pdb.set_trace() 
   youtube = get_authenticated_service(args)
   try:
     initialize_upload(youtube, args)
