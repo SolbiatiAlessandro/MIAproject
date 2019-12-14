@@ -1,7 +1,6 @@
 FROM puckel/docker-airflow
+# we need root permission to pip install and apt-get instlal
 USER root
-COPY MIAcode ${AIRFLOW_HOME}/dags
-COPY tests.py ${AIRFLOW_HOME}/tests.py
 COPY MIAcode/MIAutils/scraper/requirements.txt ${AIRFLOW_HOME}/scraper_requirements.txt
 COPY MIAcode/MIAutils/generate_text/requirements.txt ${AIRFLOW_HOME}/generate_text_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/scraper_requirements.txt
@@ -20,8 +19,11 @@ RUN  apt-get update \
      && rm -rf /var/lib/apt/lists/* \
      && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
      && chmod +x /usr/sbin/wait-for-it.sh
-USER airflow
 # INSTALL CHROMIUM
 RUN pyppeteer-install
+# putting code copy here allows to avoid downloading chromium (100MB)
+# all the time that we change the code
+COPY MIAcode ${AIRFLOW_HOME}/dags
+COPY tests.py ${AIRFLOW_HOME}/tests.py
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "./tests.py"] 
+CMD ["bash"]

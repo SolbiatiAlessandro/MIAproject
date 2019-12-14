@@ -10,22 +10,28 @@ sys.path.append("../")
 import MIAutils.scraper.youtube_top_videos as scraper
 from typing import List, Tuple
 import asyncio
+import logging
 from airflow.models import Variable
-from youtube_translation_encyclopedia import BATCH_VARIABLE_NAMES
+from airflow.models.crypto import get_fernet, InvalidFernetToken
 
+BATCH_VARIABLE_NAMES = [
+    "youtube_translation_encyclopedia_BATCH_SIZE",
+    "youtube_translation_encyclopedia_BATCH_START"
+]
 
 def get_batch_variables():
     # TODO: this stuff is not documented, might want to write
     # docs and push to airflow/answer SOF questions
-    return [Variable.get(variable_name).get_val() \
-                    for variable_name in BATCH_VARIABLE_NAMES]
+    res = [int(Variable.get(variable_name)) \
+                for variable_name in BATCH_VARIABLE_NAMES]
+    return res
+
 
 def update_batch_variables(
         batch_size, batch_start
         ):
-    #TODO: probably this is not persistent
-    Variable.get(BATCH_VARIABLE_NAMES[0]).set_val(batch_size)
-    Variable.get(BATCH_VARIABLE_NAMES[1]).set_val(batch_start)
+    Variable.set(BATCH_VARIABLE_NAMES[0], batch_size)
+    Variable.set(BATCH_VARIABLE_NAMES[1], batch_start)
 
 def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
     """

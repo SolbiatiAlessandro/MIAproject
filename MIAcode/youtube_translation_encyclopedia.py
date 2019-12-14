@@ -16,7 +16,7 @@ import sys
 AIRFLOW_HOME = "/usr/local/airflow/"
 sys.path.append(os.path.join(AIRFLOW_HOME, "MIAtranslation"))
 sys.path.append("../")
-from MIAtranslation.scrape_untranslated_videos import scrape_untranslated_videos
+from MIAtranslation.scrape_untranslated_videos import scrape_untranslated_videos, BATCH_VARIABLE_NAMES
 from MIAtranslation.translate_scripts import translate_scripts
 from MIAtranslation.generate_translated_videos import generate_translated_videos
 from MIAtranslation.upload_translated_videos import upload_translated_videos
@@ -29,20 +29,15 @@ default_args = {
     'retries': 0
 }
 
-BATCH_VARIABLE_NAMES = [
-    "youtube_translation_encyclopedia_BATCH_SIZE",
-    "youtube_translation_encyclopedia_BATCH_START"
-]
-
 def set_variable(variable_key, variable_val):
     """
     workaround for 
         sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) 
         UNIQUE constraint failed: variable.key
     """
-    variable = Variable.get(variable_key)
-    variable._val = variable_val
-    variable.is_encrypted = False
+    variable = Variable.get(variable_key, default_var=None)
+    if variable is None:
+        variable = Variable.set(variable_key, variable_val)
 
 def set_variables(
         batch_start = 0, 
