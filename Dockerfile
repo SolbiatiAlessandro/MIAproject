@@ -3,8 +3,10 @@ FROM puckel/docker-airflow
 USER root
 COPY MIAcode/MIAutils/scraper/requirements.txt ${AIRFLOW_HOME}/scraper_requirements.txt
 COPY MIAcode/MIAutils/generate_text/requirements.txt ${AIRFLOW_HOME}/generate_text_requirements.txt
+COPY MIAcode/MIAutils/google_wrapper/requirements.txt ${AIRFLOW_HOME}/google_wrapper_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/scraper_requirements.txt
 RUN pip install -r ${AIRFLOW_HOME}/generate_text_requirements.txt
+RUN pip install -r ${AIRFLOW_HOME}/google_wrapper_requirements.txt
 # GET CHROMIUM LIBRARIES
 RUN  apt-get update \
      # (alex) added by me to make chromium work from airflow base
@@ -21,9 +23,25 @@ RUN  apt-get update \
      && chmod +x /usr/sbin/wait-for-it.sh
 # INSTALL CHROMIUM
 RUN pyppeteer-install
-# putting code copy here allows to avoid downloading chromium (100MB)
-# all the time that we change the code
-COPY MIAcode ${AIRFLOW_HOME}/dags
+
+# DOCS (sphinx)
+RUN apt-get update && apt-get install -y python3-sphinx
+COPY docs docs
+RUN pip install -r docs/requirements.txt
+
+# TESTS (pytest)
 COPY tests.py ${AIRFLOW_HOME}/tests.py
+
+# ---
+
+# LEAVE THIS AT THE END SO WHEN YOU CHANGE CODE IT DOES
+# NOT REBUILD THE ENTIRE DOCKER
+
+# -------
+# this is a really dumb workaround because I don't know how
+# to change name of dags_folder in airflow.cfg
+COPY MIAcode ${AIRFLOW_HOME}/dags
+# need this for hardcoded import in DOCS
+COPY MIAcode ${AIRFLOW_HOME}/MIAcode
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

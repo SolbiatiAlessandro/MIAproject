@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+"""
+generate wiki test module
+"""
 import wikipediaapi
 import logging
 import os
 
 def create_filepath(filename: str) -> str:
+    """
+    """
     here = os.path.dirname(os.path.realpath(__file__))
     subdir = "Text Files"
     filename = ("%s.txt" % filename)
@@ -12,13 +17,16 @@ def create_filepath(filename: str) -> str:
     return filepath
 
 def create_textfile(filepath: str, text: str) -> None:  
+    """
+    """
     f = open(filepath,"wb+")
     encoded_text = (text).encode("utf-8")
     f.write(encoded_text)
     f.close()
 
 def generate_wiki_text(input_keyword: str) -> None:
-
+    """
+    """
     logging.warning("called generate_wiki_text with input_keyword={}".format(input_keyword))
     wiki_wiki = wikipediaapi.Wikipedia('en')
     page_py = wiki_wiki.page(input_keyword)
