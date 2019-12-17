@@ -74,6 +74,15 @@ google_wrapper
 .. automodule:: MIAcode.MIAutils.google_wrapper.upload_video_wrapper
    :members:
 
+text_to_video
+-------------
+
+.. automodule:: MIAcode.MIAutils.text_to_video.generate_video_utils
+   :members:
+
+
+.. automodule:: MIAcode.MIAutils.text_to_video.text_to_audio
+   :members:
 
 Indices and tables
 ==================
