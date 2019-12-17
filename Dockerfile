@@ -26,8 +26,9 @@ RUN pyppeteer-install
 
 # DOCS (sphinx)
 RUN apt-get update && apt-get install -y python3-sphinx
+COPY docs/requirements.txt docs_requirements.txt
+RUN pip install -r docs_requirements.txt
 COPY docs docs
-RUN pip install -r docs/requirements.txt
 
 # TESTS (pytest)
 COPY tests.py ${AIRFLOW_HOME}/tests.py

@@ -1,8 +1,9 @@
 """
 this is the module that generates the actual .mp4 file
 """
+from typing import Dict
 
-def generate_video_from_mp4(miascript: Dict) -> return Dict:
+def generate_video_from_mp4(miascript: Dict) -> Dict:
     """
     given a `miascript` dictionary with at least:
     - miascript.audio_filename

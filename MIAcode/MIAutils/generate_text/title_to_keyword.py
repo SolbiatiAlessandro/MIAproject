@@ -1,7 +1,13 @@
+"""
+TODO (oana): add doc string
+"""
 import re
 from typing import Optional
 
 def title_to_keyword(input_yt_title: str) -> Optional[str]:
+    """
+    TODO (oana): add doc string
+    """
     #input_yt_title
     #import pdb;pdb.set_trace()
     re_match_pattern1 = re.search('(?<=is )(.*)(?=\? What)', input_yt_title)

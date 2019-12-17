@@ -67,6 +67,11 @@ generate_text
 .. automodule:: MIAcode.MIAutils.generate_text.generate_wiki_text
    :members:
 
+-------------
+
+.. automodule:: MIAcode.MIAutils.generate_text.title_to_keyword
+   :members:
+
 
 google_wrapper
 --------------
@@ -80,6 +85,8 @@ text_to_video
 .. automodule:: MIAcode.MIAutils.text_to_video.generate_video_utils
    :members:
 
+
+-------------
 
 .. automodule:: MIAcode.MIAutils.text_to_video.text_to_audio
    :members:
