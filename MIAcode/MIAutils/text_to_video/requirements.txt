@@ -1,0 +1,6 @@
+unidecode
+torch
+numpy
+scipy
+librosa
+inflect
