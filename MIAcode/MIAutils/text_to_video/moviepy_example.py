@@ -75,6 +75,7 @@ dancing_knights = (clips_array([[edited_left, edited_right]])
 
 
 txt_title = (TextClip("15th century dancing\n(hypothetical)", fontsize=70,
+
                font="Century-Schoolbook-Roman", color="white")
              .margin(top=15, opacity=0)
              .set_position(("center","top")))
