@@ -91,6 +91,14 @@ text_to_video
 .. automodule:: MIAcode.MIAutils.text_to_video.text_to_audio
    :members:
 
+
+Typing
+======
+
+.. automodule:: MIAcode.miatypes
+   :members:
+
+
 Indices and tables
 ==================
 

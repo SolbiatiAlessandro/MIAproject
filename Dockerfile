@@ -28,10 +28,13 @@ RUN pyppeteer-install
 RUN apt-get update && apt-get install -y python3-sphinx
 COPY docs/requirements.txt docs_requirements.txt
 RUN pip install -r docs_requirements.txt
-COPY docs docs
 
-# TESTS (pytest)
-COPY tests.py ${AIRFLOW_HOME}/tests.py
+# text_to_video libraries
+COPY MIAcode/MIAutils/text_to_video/requirements_generate_video_utils.txt ${AIRFLOW_HOME}/requirements_generate_video_utils.txt
+COPY MIAcode/MIAutils/text_to_video/requirements_text_to_audio.txt ${AIRFLOW_HOME}/requirements_text_to_audio.txt
+RUN pip install -r requirements_generate_video_utils.txt
+# this is big
+# RUN pip install -r requirements_text_to_audio.txt
 
 # ---
 
@@ -41,6 +44,9 @@ COPY tests.py ${AIRFLOW_HOME}/tests.py
 # -------
 # this is a really dumb workaround because I don't know how
 # to change name of dags_folder in airflow.cfg
+COPY docs docs
+# TESTS (pytest)
+COPY tests.py ${AIRFLOW_HOME}/tests.py
 COPY MIAcode ${AIRFLOW_HOME}/dags
 # need this for hardcoded import in DOCS
 COPY MIAcode ${AIRFLOW_HOME}/MIAcode
