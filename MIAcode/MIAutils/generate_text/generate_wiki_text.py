@@ -23,6 +23,24 @@ def create_textfile(filepath: str, text: str) -> None:
     encoded_text = (text).encode("utf-8")
     f.write(encoded_text)
     f.close()
+    
+def get_spanish_title(input_keyword: str) -> str:
+    """
+    """
+    logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
+    wiki_wiki = wikipediaapi.Wikipedia('en')
+    page_py = wiki_wiki.page(input_keyword)
+
+    if not page_py.title:
+        logging.warning('Wikipedia page does not exist')
+        return
+    if 'es' not in page_py.langlinks.keys(): 
+        logging.warning('Wikipedia page does not have a spanish version')
+        return
+
+    page_py_es = page_py.langlinks['es']
+
+    return page_py_es.title
 
 def generate_wiki_text(input_keyword: str) -> None:
     """

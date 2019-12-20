@@ -23,7 +23,7 @@ Original file is located at
 #!pip install unidecode
 def text_to_mp3(filename: str) -> str:
     import torch
-    tacotron2 = torch.hub.load('nvidia/DeepLearningExamples:torchhub', 'nvidia_tacotron2', map_location=torch.device('cpu'))
+    tacotron2 = torch.hub.load('nvidia/DeepLearningExamples:torchhub', 'nvidia_tacotron2')
 
     """will load the Tacotron2 model pre-trained on [LJ Speech dataset](https://keithito.com/LJ-Speech-Dataset/)
 
@@ -54,14 +54,14 @@ def text_to_mp3(filename: str) -> str:
 
     """Prepare tacotron2 for inference"""
 
-    # tacotron2 = tacotron2.to('cuda')
+    tacotron2 = tacotron2.to('cuda')
     tacotron2.eval()
 
     """Load waveglow from PyTorch Hub"""
 
     waveglow = torch.hub.load('nvidia/DeepLearningExamples:torchhub', 'nvidia_waveglow')
     waveglow = waveglow.remove_weightnorm(waveglow)
-    # waveglow = waveglow.to('cuda')
+    waveglow = waveglow.to('cuda')
     waveglow.eval()
 
     """Now, let's make the model say *"hello world, I missed you"*"""
@@ -74,8 +74,7 @@ def text_to_mp3(filename: str) -> str:
 
     # preprocessing
     sequence = np.array(tacotron2.text_to_sequence(text, ['english_cleaners']))[None, :]
-    #sequence = torch.from_numpy(sequence).to(device='cuda', dtype=torch.int64)
-    sequence = torch.from_numpy(sequence).to(device='cpu', dtype=torch.int64)
+    sequence = torch.from_numpy(sequence).to(device='cuda', dtype=torch.int64)
 
     # run the models
     with torch.no_grad():
@@ -110,4 +109,4 @@ def text_to_mp3(filename: str) -> str:
     """
 
 if __name__ == '__main__':
-    audio_filename = text_to_mp3('C:/Users/ASUS/MIAProject/MIAcode/MIAutil    s/generate_text/Text Files/Entrepreneurship.txt')
+    audio_filename = text_to_mp3('C:/Users/ASUS/MIAProject/MIAcode/MIAutils/generate_text/Text Files/Entrepreneurship.txt')
