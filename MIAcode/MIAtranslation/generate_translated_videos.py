@@ -1,9 +1,10 @@
 """
-some ideas here
+this is the generate_translated_videos operator
+we use utils from MIAutils.text_to_video
 
-- where to find TTS? can we use WaveNet?
-- what images to use? think about creative part
-- how to generate video in python?
+- where to find TTS? can we use WaveNet? : kind of, we use Tacotron + LCPnet
+- what images to use? : in the beinning we don't use images, just slide with text
+- how to generate video in python? : we use moviepy
 """
 from typing import List, Tuple
 import logging
@@ -13,11 +14,12 @@ def generate_translated_videos(**kwargs) -> List[str]:
     generate .mp4 files from scripts
     """
     task_instance = kwargs['ti']
-    translated_videos_scripts_filenames = task_instance.xcom_pull(
+    miascripts: List[MiaScript] = task_instance.xcom_pull(
             key=None, 
             task_ids='translate_scripts') 
     logging.info("retrieved translated_videos_scripts_filenames from xcom_pull")
-    logging.info(translated_videos_scripts_filenames)
+    miascripts[0]._debug()
+    miascripts[-1]._debug()
 
     ## TODO (OANA)
     # given the translated name and script

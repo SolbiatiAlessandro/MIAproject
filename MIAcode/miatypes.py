@@ -17,15 +17,28 @@ class MiaScript():
     def _debug(self):
         logging.info(pformat(self.__dict__))
 
+    def set_original_video_name(self, original_video_name: str):
+        """
+        video name in EN
+        """
+        self.original_video_name = original_video_name
+
+    def set_original_video_link(self, video_link: str):
+        """
+        video name in EN
+        """
+        self.video_link = video_link
+
     def set_video_name(self, video_name: str):
         """
         """
         self.video_name = video_name
 
-    def set_video_text(self, video_text: str):
+    def set_video_text_filename(self, video_text_filename: str):
         """
+        location of the text
         """
-        self.video_text = video_text
+        self.video_text_filename = video_text_filename
 
     def set_audio_filename(self, audio_filename: str):
         """

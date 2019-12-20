@@ -13,6 +13,7 @@ import asyncio
 import logging
 from airflow.models import Variable
 from airflow.models.crypto import get_fernet, InvalidFernetToken
+from miatypes import MiaScript
 
 BATCH_VARIABLE_NAMES = [
     "youtube_translation_encyclopedia_BATCH_SIZE",
@@ -33,9 +34,10 @@ def update_batch_variables(
     Variable.set(BATCH_VARIABLE_NAMES[0], batch_size)
     Variable.set(BATCH_VARIABLE_NAMES[1], batch_start)
 
-def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
+def scrape_untranslated_videos(**kwargs) -> List[MiaScript]:
     """
-    returns [[video_name_EN, video_link]]
+    returns a list of MiaScript with original_video_name 
+    and original_video_link populated
     """
 
     batch_size, batch_start = get_batch_variables()
@@ -49,4 +51,14 @@ def scrape_untranslated_videos(**kwargs) -> List[Tuple[str, str]]:
             )
 
     update_batch_variables(batch_size, batch_start + batch_size)
-    return untranslated_videos
+
+    miascripts = []
+
+    # generate miascripts
+    for (video_name, video_link) in untranslated_videos:
+        miascript = MiaScript()
+        miascript.set_original_video_name(video_name)
+        miascript.set_original_video_link(video_link)
+        miascripts.append(miascript)
+
+    return miascripts
