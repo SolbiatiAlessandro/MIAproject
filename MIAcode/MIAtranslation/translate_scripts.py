@@ -9,7 +9,7 @@ import sys
 sys.path.append("../")
 from MIAutils.generate_text.generate_wiki_text import generate_wiki_text
 from MIAutils.generate_text.title_to_keyword import title_to_keyword 
-from miatyping import MiaScript
+from miatypes import MiaScript
 
 def translate_scripts(**kwargs) -> List[MiaScript]:
     """
