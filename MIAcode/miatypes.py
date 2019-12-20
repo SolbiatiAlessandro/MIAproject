@@ -6,29 +6,6 @@ from uuid import uuid4
 import logging
 from pprint import pformat
 
-def miafilter(
-        miascripts: List[MiaScript], 
-        attribute: str = 'video_name') -> List[MiaScript]:
-    """
-    filter miascripts on a given attribute (to kill videos
-    that didn't pass the operator
-    """
-    def check_attribute(script: MiaScript):
-        if not has_attr(script, attribute):
-            return False
-        if get_attr(script, attribute) is None:
-            return False
-        return True
-
-    original_length = len(miascripts)
-    miascripts = filter(check_attribute, miascripts)
-    filtered_length = len(miascripts)
-
-    logging.warning("Filtered MiaScripts from {} to {} (on {})".format(
-        original_length,
-        filtered_length,
-        attribute))
-    return miascript
 
 class MiaScript():
     """
@@ -78,3 +55,27 @@ class MiaScript():
         """
         """
         self.images_filename = images_filename
+
+def miafilter(
+        miascripts: List[MiaScript], 
+        attribute: str = 'video_name') -> List[MiaScript]:
+    """
+    filter miascripts on a given attribute (to kill videos
+    that didn't pass the operator
+    """
+    def check_attribute(script: MiaScript):
+        if not hasattr(script, attribute):
+            return False
+        if getattr(script, attribute) is None:
+            return False
+        return True
+
+    original_length = len(miascripts)
+    miascripts = list(filter(check_attribute, miascripts))
+    filtered_length = len(miascripts)
+
+    logging.warning("Filtered MiaScripts from {} to {} (on {})".format(
+        original_length,
+        filtered_length,
+        attribute))
+    return miascripts
