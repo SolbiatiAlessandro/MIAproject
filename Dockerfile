@@ -30,9 +30,14 @@ COPY docs/requirements.txt docs_requirements.txt
 RUN pip install -r docs_requirements.txt
 
 # text_to_video libraries
+# video generation
 COPY MIAcode/MIAutils/text_to_video/requirements_generate_video_utils.txt ${AIRFLOW_HOME}/requirements_generate_video_utils.txt
 COPY MIAcode/MIAutils/text_to_video/requirements_text_to_audio.txt ${AIRFLOW_HOME}/requirements_text_to_audio.txt
 RUN pip install -r requirements_generate_video_utils.txt
+RUN apt-get update \
+	&& apt-get install magickimage
+
+# audio generation
 # this is big
 # RUN pip install -r requirements_text_to_audio.txt
 
