@@ -9,9 +9,9 @@ but it breaks. so now we use an api service (voicerss.org)
 """
 from typing import List, Tuple
 import logging
-from MIAutils.text_to_video.generate_video_utils import \k
+from MIAutils.text_to_video.generate_video_utils import \
         generate_video_from_mp4
-from miascripts import MiaScript, miafilter
+from miatypes import MiaScript, miafilter
 
 
 def generate_translated_videos(**kwargs) -> List[MiaScript]:
@@ -28,7 +28,7 @@ def generate_translated_videos(**kwargs) -> List[MiaScript]:
 
     for i, miascript in enumerate(miascripts):
         logging.info("starting video generation for video {}/{}".format(
-            i, len(miascript))
+            i, len(miascripts)))
 
         ## TODO (OANA)
         # add here your file that add .mp4 file

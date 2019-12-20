@@ -36,6 +36,7 @@ COPY MIAcode/MIAutils/text_to_video/requirements_text_to_audio.txt ${AIRFLOW_HOM
 RUN pip install -r requirements_generate_video_utils.txt
 RUN apt-get update \
 	&& apt-get install -y imagemagick
+RUN mv /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xmlout
 
 # TEMPORARY  before we have real audio
 COPY MIAcode/MIAutils/text_to_video/static/spanish_example.mp3 ${AIRFLOW_HOME}/spanish_example.mp3
