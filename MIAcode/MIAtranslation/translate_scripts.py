@@ -8,6 +8,7 @@ import logging
 import sys
 sys.path.append("../")
 from MIAutils.generate_text.generate_wiki_text import generate_wiki_text
+from MIAutils.generate_text.generate_wiki_text import get_spanish_title
 from MIAutils.generate_text.title_to_keyword import title_to_keyword 
 from miatypes import MiaScript
 
@@ -30,7 +31,7 @@ def translate_scripts(**kwargs) -> List[MiaScript]:
         video_script_name = generate_wiki_text(keyword_from_title)
 
         # TODO (Oana): gimme spanish title here
-        ES_title = "no es implementado"
+        ES_title = get_spanish_title(keyword_from_title)
 
         miascript.set_video_name(ES_title)
         miascript.set_video_text_filename(video_script_name)
