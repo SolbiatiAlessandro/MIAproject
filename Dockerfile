@@ -35,7 +35,10 @@ COPY MIAcode/MIAutils/text_to_video/requirements_generate_video_utils.txt ${AIRF
 COPY MIAcode/MIAutils/text_to_video/requirements_text_to_audio.txt ${AIRFLOW_HOME}/requirements_text_to_audio.txt
 RUN pip install -r requirements_generate_video_utils.txt
 RUN apt-get update \
-	&& apt-get install magickimage
+	&& apt-get install -y imagemagick
+
+# TEMPORARY  before we have real audio
+COPY MIAcode/MIAutils/text_to_video/static/spanish_example.mp3 ${AIRFLOW_HOME}/spanish_example.mp3
 
 # audio generation
 # this is big
