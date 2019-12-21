@@ -6,6 +6,7 @@ from uuid import uuid4
 import logging
 from pprint import pformat
 
+
 class MiaScript():
     """
     this is a class to fix the classes of miascript 
@@ -31,8 +32,15 @@ class MiaScript():
 
     def set_video_name(self, video_name: str):
         """
+        this is like "Emprendimiento", the name that goes in the thumbnail
         """
         self.video_name = video_name
+
+    def set_video_long_name(self, video_long_name: str):
+        """
+        this is like "Que es el Emprendimiento?", is the video title
+        """
+        self.video_long_name = video_long_name
 
     def set_video_text_filename(self, video_text_filename: str):
         """
@@ -54,3 +62,27 @@ class MiaScript():
         """
         """
         self.images_filename = images_filename
+
+def miafilter(
+        miascripts: List[MiaScript], 
+        attribute: str = 'video_name') -> List[MiaScript]:
+    """
+    filter miascripts on a given attribute (to kill videos
+    that didn't pass the operator
+    """
+    def check_attribute(script: MiaScript):
+        if not hasattr(script, attribute):
+            return False
+        if getattr(script, attribute) is None:
+            return False
+        return True
+
+    original_length = len(miascripts)
+    miascripts = list(filter(check_attribute, miascripts))
+    filtered_length = len(miascripts)
+
+    logging.warning("Filtered MiaScripts from {} to {} (on {})".format(
+        original_length,
+        filtered_length,
+        attribute))
+    return miascripts

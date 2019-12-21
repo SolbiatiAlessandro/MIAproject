@@ -2,14 +2,19 @@
 this is the generate_translated_videos operator
 we use utils from MIAutils.text_to_video
 
-- where to find TTS? can we use WaveNet? : kind of, we use Tacotron + LCPnet
+- where to find TTS? can we use WaveNet? : kind of, we could use Tacotron + LCPnet 
+but it breaks. so now we use an api service (voicerss.org)
 - what images to use? : in the beinning we don't use images, just slide with text
 - how to generate video in python? : we use moviepy
 """
 from typing import List, Tuple
 import logging
+from MIAutils.text_to_video.generate_video_utils import \
+        generate_video_from_mp4
+from miatypes import MiaScript, miafilter
 
-def generate_translated_videos(**kwargs) -> List[str]:
+
+def generate_translated_videos(**kwargs) -> List[MiaScript]:
     """
     generate .mp4 files from scripts
     """
@@ -21,13 +26,16 @@ def generate_translated_videos(**kwargs) -> List[str]:
     miascripts[0]._debug()
     miascripts[-1]._debug()
 
-    ## TODO (OANA)
-    # given the translated name and script
-    # generate a video to be uploaded on youtube 
-    # and save it in a local path
+    for i, miascript in enumerate(miascripts):
+        logging.info("starting video generation for video {}/{}".format(
+            i, len(miascripts)))
 
-    generated_video_path = [
-            'translated_video_1.mp4',
-            'translated_video_2.mp4',
-            ]
-    return generated_video_path
+        ## TODO (OANA)
+        # add here your file that add .mp4 file
+        # and that does this (inside or outside your function)
+        miascript.set_audio_filename("./spanish_example.mp3")
+
+        # in my case is doing it inside
+        generate_video_from_mp4(miascript)
+
+    return miafilter(miascripts, 'video_filename')

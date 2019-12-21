@@ -10,7 +10,7 @@ sys.path.append("../")
 from MIAutils.generate_text.generate_wiki_text import generate_wiki_text
 from MIAutils.generate_text.generate_wiki_text import get_spanish_title
 from MIAutils.generate_text.title_to_keyword import title_to_keyword 
-from miatyping import MiaScript
+from miatypes import MiaScript, miafilter
 
 def translate_scripts(**kwargs) -> List[MiaScript]:
     """
@@ -30,12 +30,15 @@ def translate_scripts(**kwargs) -> List[MiaScript]:
         keyword_from_title = title_to_keyword(EN_title)
         video_script_name = generate_wiki_text(keyword_from_title)
 
-        # TODO (Oana): gimme spanish title here
         ES_title = get_spanish_title(keyword_from_title)
+        # TODO (oana)
+        # fix title: put the long title here
+        ES_long_title = "Que es " + ES_title
 
-        miascript.set_video_name(ES_title)
+        miascript.set_video_name(ES_title) # this is 'Emprendimiento'
+        miascript.set_video_long_name(ES_long_title) # this is 'Que es Emprendimiento?'
         miascript.set_video_text_filename(video_script_name)
 
     miascripts[0]._debug()
     miascripts[-1]._debug()
-    return miascripts
+    return miafilter(miascripts, 'video_name')
