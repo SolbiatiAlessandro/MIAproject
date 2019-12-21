@@ -32,8 +32,15 @@ class MiaScript():
 
     def set_video_name(self, video_name: str):
         """
+        this is like "Emprendimiento", the name that goes in the thumbnail
         """
         self.video_name = video_name
+
+    def set_video_long_name(self, video_long_name: str):
+        """
+        this is like "Que es el Emprendimiento?", is the video title
+        """
+        self.video_long_name = video_long_name
 
     def set_video_text_filename(self, video_text_filename: str):
         """

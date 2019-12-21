@@ -31,8 +31,12 @@ def translate_scripts(**kwargs) -> List[MiaScript]:
         video_script_name = generate_wiki_text(keyword_from_title)
 
         ES_title = get_spanish_title(keyword_from_title)
+        # TODO (oana)
+        # fix title: put the long title here
+        ES_long_title = "Que es " + ES_title
 
-        miascript.set_video_name(ES_title)
+        miascript.set_video_name(ES_title) # this is 'Emprendimiento'
+        miascript.set_video_long_name(ES_long_title) # this is 'Que es Emprendimiento?'
         miascript.set_video_text_filename(video_script_name)
 
     miascripts[0]._debug()
