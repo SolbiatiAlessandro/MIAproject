@@ -41,7 +41,7 @@ def set_variable(variable_key, variable_val):
 
 def set_variables(
         batch_start = 0, 
-        batch_size = 30
+        batch_size = 5
         ):
     set_variable(BATCH_VARIABLE_NAMES[1], batch_start)
     set_variable(BATCH_VARIABLE_NAMES[0], batch_size)

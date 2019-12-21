@@ -37,6 +37,10 @@ RUN pip install -r requirements_generate_video_utils.txt
 RUN apt-get update \
 	&& apt-get install -y imagemagick
 RUN mv /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xmlout
+COPY MIAcode/MIAutils/text_to_video/static ${AIRFLOW_HOME}/static
+
+# audio
+COPY MIAcode/MIAutils/text_to_video/tts/voicerss_key.json ${AIRFLOW_HOME}/voicerss_key.json
 
 # ---
 
