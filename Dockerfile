@@ -38,13 +38,6 @@ RUN apt-get update \
 	&& apt-get install -y imagemagick
 RUN mv /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xmlout
 
-# TEMPORARY  before we have real audio
-COPY MIAcode/MIAutils/text_to_video/static/spanish_example.mp3 ${AIRFLOW_HOME}/spanish_example.mp3
-
-# audio generation
-# this is big
-# RUN pip install -r requirements_text_to_audio.txt
-
 # ---
 
 # LEAVE THIS AT THE END SO WHEN YOU CHANGE CODE IT DOES
