@@ -11,6 +11,8 @@ from typing import List, Tuple
 import logging
 from MIAutils.text_to_video.generate_video_utils import \
         generate_video_from_mp4
+from MIAutils.text_to_video.tts.voicerss_tts import \
+        generate_mp3
 from miatypes import MiaScript, miafilter
 
 
@@ -31,8 +33,10 @@ def generate_translated_videos(**kwargs) -> List[MiaScript]:
             i, len(miascripts)))
 
         ## TODO (OANA)
-        # add here your file that add .mp4 file
+        # add here your file that add .mp3 file
         # and that does this (inside or outside your function)
+        assert(miascript.video_text_filename, "Trying to generate the audio, the path of the text file was not found")
+        filepath_audio = generate_mp3(miascript.video_text_filename, miascript.title)
         miascript.set_audio_filename("./spanish_example.mp3")
 
         # in my case is doing it inside
