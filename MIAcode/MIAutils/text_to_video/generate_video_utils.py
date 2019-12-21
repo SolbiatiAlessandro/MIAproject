@@ -2,18 +2,29 @@
 this is the module that generates the actual .mp4 file 
 """ 
 from typing import Dict
-from moviepy.editor import AudioFileClip, clips_array, concatenate_videoclips, TextClip
+from moviepy.editor import AudioFileClip, clips_array, concatenate_videoclips, TextClip, CompositeVideoClip
 from moviepy.video.VideoClip import ImageClip
 import sys
 sys.path.append("../../")
 from miatypes import MiaScript
+from random import random
 import logging
+import os
 
 def generate_video_filename(video_name: str) -> str:
     """
     standardise video output name
     """
     return video_name + ".mp4"
+
+def generate_image_filename() -> str:
+    """
+    randomised image, like ./static/_mia1.jpg
+    """
+    NUMBER_OF_IMAGES = 3
+    random_suffix = int(random()*10%NUMBER_OF_IMAGES) + 1
+    return os.path.join("static","_mia"+str(random_suffix)+".jpg")
+
 
 def generate_video_from_mp4(miascript: MiaScript) -> None:
     """
@@ -30,44 +41,30 @@ def generate_video_from_mp4(miascript: MiaScript) -> None:
     audio = (AudioFileClip(miascript.audio_filename))
     total_duration = audio.duration
 
-    # OPTIONAL IMAGES
-    """
-    assert miascript.images_filename, "you need images to create video"
+    assert miascript.video_name, "you need a video_name to add in the thumbnail"
+    assert miascript.video_long_name, "you need a video_long_name to save video for video full title"
+    image_filename = generate_image_filename()
+    image = ImageClip(image_filename)
+    w, h = image.w, image.h
 
-    clip_duration = total_duration / len(miascript.images_filename)
-    image_clips = [ImageClip(image_filename)\
-                .set_duration(clip_duration)\
-                .fadein(.5)\
-                .fadeout(.5)
-                for image_filename in miascript.images_filename[::-1]]
-
-    video = concatenate_videoclips(image_clips)\
-            .set_audio(audio)\
-            .set_duration(total_duration - 1)
-    """
-    # >>> logging.warning(TextClip.list('font'))
-    """
-    WARNING  root:generate_video_utils.py:48 ['AndaleMono', 'AppleChancery', 'AppleMyungjo', 'Arial', 'ArialB', 'ArialBI', 'ArialBk', 'ArialI', 'ArialNarrow', 'ArialNarrowB', 'ArialNarrowBI', 'ArialNarrowI', 'ArialRoundedB', 'ArialUnicode', 'Ayuthaya', 'BigCaslonM', 'BrushScriptI', 'Chalkduster', 'ComicSans', 'ComicSansMSB', 'CourierNew', 'CourierNewB', 'CourierNewBI', 'CourierNewI', 'GB18030Bitmap', 'Georgia', 'GeorgiaB', 'GeorgiaBI', 'GeorgiaI', 'Gurmukhi', 'Herculanum', 'HoeflerTextOrnaments', 'Impact', 'InaiMathi', 'Kokonor', 'Krungthep', 'MicrosoftSansSerif', 'PlantagenetCherokee', 'Sathu', 'Silom', 'Skia', 'Tahoma', 'TahomaB', 'TimesNewRoman', 'TimesNewRomanB', 'TimesNewRomanBI', 'TimesNewRomanI', 'Trebuchet', 'TrebuchetMSB', 'TrebuchetMSBI', 'TrebuchetMSI', 'Verdana', 'VerdanaB', 'VerdanaBI', 'VerdanaI', 'Webdings', 'Wingdings', 'Wingdings2', 'Wingdings3', 'Zapfino']
-    """
-
-
-    assert miascript.video_name, "you need a video_name to save video"
-    # TODO, figure out how to increase size of the video, target_position
-    video = (
-                TextClip(miascript.video_name, 
-                    fontsize=50,
-                    font="Impact", 
+    text_title = (
+                TextClip(miascript.video_name.upper(), 
+                    fontsize=100,
+                    font="Georgia",
                     color="black",
                     bg_color="white",
-                    method="label",
+                    method='caption',
                     )
-                .margin(top=15, opacity=0)
-                .set_position(("center","top"))
-                .set_duration(total_duration)
-                .set_audio(audio)
+                .set_position((0, 0.61), relative=True)
+                .resize(width=w)
+                .margin(15, 'grey')
                 )
 
-    video_filename  = generate_video_filename(miascript.video_name)
+    video = (CompositeVideoClip([image, text_title])
+                .set_duration(total_duration)
+                .set_audio(audio))
+
+    video_filename  = generate_video_filename(miascript.video_long_name)
     
     logging.info("writing video to {}".format(video_filename))
     # parameters are at random
