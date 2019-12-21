@@ -201,7 +201,7 @@ def wrapper(
     """
     # setting arguments for running upload_video script
     try:
-        args = oauth2client.tools.argparser.parse_args()
+        args = oauth2client.tools.argparser.parse_args([])
         args.file = video_path
         args.title = video_title
         args.description = video_description

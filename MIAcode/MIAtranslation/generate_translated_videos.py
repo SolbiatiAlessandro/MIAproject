@@ -32,12 +32,10 @@ def generate_translated_videos(**kwargs) -> List[MiaScript]:
         logging.info("starting video generation for video {}/{}".format(
             i, len(miascripts)))
 
-        ## TODO (OANA)
-        # add here your file that add .mp3 file
-        # and that does this (inside or outside your function)
         assert(miascript.video_text_filename, "Trying to generate the audio, the path of the text file was not found")
-        filepath_audio = generate_mp3(miascript.video_text_filename, miascript.title)
-        miascript.set_audio_filename("./spanish_example.mp3")
+        assert(miascript.video_name, "Trying to create audio filename")
+        filepath_audio = generate_mp3(miascript.video_text_filename, miascript.video_name)
+        miascript.set_audio_filename(filepath_audio)
 
         # in my case is doing it inside
         generate_video_from_mp4(miascript)
