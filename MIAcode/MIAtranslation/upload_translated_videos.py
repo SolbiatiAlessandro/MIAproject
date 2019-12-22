@@ -10,6 +10,7 @@ from typing import List
 from MIAutils.google_wrapper.upload_video_wrapper \
         import wrapper as uploader
 from random import random
+from youtube_translation_encyclopedia import dump_to_miascripts_dict
 
 def _test_operator(**kwargs):
     """
@@ -51,9 +52,17 @@ def _operator(miascripts: List[MiaScript]) -> None:
         logging.info("uploading finished with response:")
         logging.info(response)
 
-        uploaded_videos += response
-    return uploaded_videos
+        # TODO (alex): confirm if reponse = 1 actually means it's uploaded
+        # there might be time when it does not upload
+        # but still get positive response
 
+        miascript.upload_outcome = reponse
+        uploaded_videos += response
+
+        # save this miascript in persistent memory
+        dump_to_miascripts_dict([miascript])
+        
+    return uploaded_videos
 
 def upload_translated_videos(**kwargs):
     """
@@ -63,7 +72,24 @@ def upload_translated_videos(**kwargs):
     miascripts: List[MiaScript] = task_instance.xcom_pull(
             key=None, 
             task_ids='generate_translated_videos') 
-    logging.info("retrieved miascripts from xcom_pull")
+    logging.info("retrieved {} miascripts from xcom_pull".\
+            format(len(miascripts))
+    miascripts[0]._debug()
+    miascripts[-1]._debug()
+
+    uploaded_videos = _operator(miascripts)
+    logging.info("uploaded {} videos".format(uploaded_videos))
+
+def reupload_videos(**kwargs):
+    """
+    reupload videos from local .mp4 files
+    """
+    task_instance = kwargs['ti']
+    miascripts: List[MiaScript] = task_instance.xcom_pull(
+            key=None, 
+            task_ids='collect_videos_not_uploaded') 
+    logging.info("retrieved {} miascripts from xcom_pull".\
+            format(len(miascripts))
     miascripts[0]._debug()
     miascripts[-1]._debug()
 

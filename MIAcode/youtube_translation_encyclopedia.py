@@ -13,6 +13,7 @@ from airflow.operators.python_operator import PythonOperator
 
 # MIA IMPORTS
 import sys
+from uuid import uuid4
 AIRFLOW_HOME = "/usr/local/airflow/"
 sys.path.append(os.path.join(AIRFLOW_HOME, "MIAtranslation"))
 sys.path.append("../")
@@ -21,13 +22,27 @@ from MIAtranslation.translate_scripts import translate_scripts
 from MIAtranslation.generate_translated_videos import generate_translated_videos
 from MIAtranslation.upload_translated_videos import upload_translated_videos
 
+MIASCIPTS_DICT = "youtube_translation_encyclopedia__miascripts_dict"
+OUTPUT_FOLDER = "./output__youtube_translation_encyclopedia"
 
-default_args = {
-    'owner': 'alessandro',
-    'start_date': dt.datetime(2018, 10, 3, 15, 58, 00),
-    'concurrency': 1,
-    'retries': 0
-}
+def get_miascripts_dict() -> Dict[uuid4, MiaScript]:
+    """
+    returns miascripts dict indexed on miascript.script_id
+    """
+    miascripts_dict: Dict[uuid4, MiaScript] = Variable.get(
+            MIASCIPTS_DICT, default_var={})
+    return miascripts_dict
+
+def dump_to_miascripts_dict(miascripts: List[MiaScript]):
+    """
+    dump miascripts to persistent memory
+    """
+    logging.info('dumping {} miascripts'.format(len(miascripts)))
+    miascripts_dict = get_miascripts_dict()
+    for miascript in miascripts:
+        miascript._debug()
+        miascripts_dict[miascripts.script_id] = miascript
+    Variable.set(MIASCIPTS_DICT, miascripts_dict)
 
 def set_variable(variable_key, variable_val):
     """
@@ -46,10 +61,17 @@ def set_variables(
     set_variable(BATCH_VARIABLE_NAMES[1], batch_start)
     set_variable(BATCH_VARIABLE_NAMES[0], batch_size)
 
+default_args = {
+    'owner': 'alessandro',
+    'start_date': dt.datetime(2018, 10, 3, 15, 58, 00),
+    'concurrency': 1,
+    'retries': 0
+}
+
 with DAG('youtube_translation_encyclopedia',
          catchup=False,
          default_args=default_args,
-         schedule_interval='0 * * * *', # every minute
+         schedule_interval='Never', # every minute
          ) as dag:
 
     ## SET VARIABLES (alex) I am not sure if this is the right place

@@ -1,11 +1,12 @@
 """
 typing for mia, used in video generation
 """
+import logging
+import os
 from typing import NamedTuple, List
 from uuid import uuid4
-import logging
+from datetime import datetime
 from pprint import pformat
-
 
 class MiaScript():
     """
@@ -14,9 +15,24 @@ class MiaScript():
     """
     def __init__(self):
         self.script_id = uuid4()
+        self.creation_date = datetime.now()
 
     def _debug(self):
         logging.info(pformat(self.__dict__))
+
+    def has_output_video(self) -> (bool, str):
+        """
+        returns (True/False, reason)
+        """
+        if not hasattr(self, 'video_filename'):
+            return (False, 'video has not been generated')
+        if not os.path.isfile(self.video_filename):
+            return (False, 'video has been generated but \
+                    is not present anymore (e.g. deleted)')
+        return (True, 'video is present')
+
+
+    #-------- SET METHODS -------------------------------------
 
     def set_original_video_name(self, original_video_name: str):
         """
@@ -67,6 +83,13 @@ class MiaScript():
         """
         """
         self.images_filename = images_filename
+
+    def set_upload_outcome(self, upload_outcome: bool):
+        """
+        False: fail
+        True: success
+        """
+        self.upload_outcome = upload_outcome
 
 def miafilter(
         miascripts: List[MiaScript], 
