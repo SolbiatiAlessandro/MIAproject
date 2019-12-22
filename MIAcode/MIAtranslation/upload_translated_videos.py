@@ -24,13 +24,14 @@ def _test_operator(**kwargs):
     test_miascript.set_video_long_name(test_video_name)
     test_miascript.set_video_filename(TEST_VIDEO_PATH)
 
-    assert _operator([test_miascript]), "upload failed"
+    assert _operator([test_miascript]) > 0, "upload zero videos"
 
 def _operator(miascripts: List[MiaScript]) -> None:
     """
     internal logic of the operator (extracted here so it cann
     be tested indipendently)
     """
+    uploaded_videos = 0
     for i, miascript in enumerate(miascripts):
         logging.info("starting video upload for video {}/{}".format(
             i+1, len(miascripts)))
@@ -50,6 +51,10 @@ def _operator(miascripts: List[MiaScript]) -> None:
         logging.info("uploading finished with response:")
         logging.info(response)
 
+        uploaded_videos += response
+    return uploaded_videos
+
+
 def upload_translated_videos(**kwargs):
     """
     upload videos from local .mp4 files
@@ -62,4 +67,5 @@ def upload_translated_videos(**kwargs):
     miascripts[0]._debug()
     miascripts[-1]._debug()
 
-    _operator(miascripts)
+    uploaded_videos = _operator(miascripts)
+    logging.info("uploaded {} videos".format(uploaded_videos))

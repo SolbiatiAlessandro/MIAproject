@@ -198,10 +198,10 @@ def wrapper(
 
         youtube = get_authenticated_service(args)
         initialize_upload(youtube, args)
-        return True
+        return 1
     except Exception as e:
         logging.error(e)
-        return False
+        return 0
 
 if __name__ == "__main__":
     result = wrapper( './20191002_173038.mp4','test_title','test_description' )
