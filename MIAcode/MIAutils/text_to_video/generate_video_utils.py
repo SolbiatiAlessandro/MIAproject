@@ -8,6 +8,7 @@ from moviepy.video.fx.mask_color import mask_color
 import sys
 sys.path.append("../../")
 from miatypes import MiaScript
+from youtube_translation_encyclopedia import OUTPUT_FOLDER
 from random import random
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
@@ -19,7 +20,7 @@ def generate_video_filename(video_name: str) -> str:
     """
     standardise video output name
     """
-    return video_name + ".mp4"
+    return os.path.join(OUTPUT_FOLDER, video_name, ".mp4")
 
 def generate_image_filename() -> str:
     """
