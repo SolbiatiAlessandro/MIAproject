@@ -58,6 +58,11 @@ class MiaScript():
         """
         self.video_filename = video_filename
 
+    def set_video_description(self, video_description: str):
+        """
+        """
+        self.video_description = video_description
+
     def set_images_filename(self, images_filename: List[str]):
         """
         """

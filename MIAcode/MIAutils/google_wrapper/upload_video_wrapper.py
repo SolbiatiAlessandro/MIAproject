@@ -170,25 +170,6 @@ def resumable_upload(insert_request):
       time.sleep(sleep_seconds)
 
 
-class wrapperArgs():
-    """
-    class for wrapping the arguments to be passed 
-    to google apis
-    """
-    def __init__(self):
-        self.file='./20191002_173038.mp4'
-        self.title='test_title'
-        self.description='test_description'
-        self.keywords='test_keyword_1,test_keyword2'
-        self.category='22'
-        self.auth_host_port = []
-    def __getattr__(self, item):
-        """
-        undefinied args are None
-        """
-        return None
-
-
 def wrapper(
         video_path,
         video_title,
@@ -209,6 +190,8 @@ def wrapper(
         args.category = video_category
         args.logging_level = 'INFO'
         args.privacyStatus = VALID_PRIVACY_STATUSES[0]
+        args.auth_host_port = [8080, 8090, 8091]
+        args.noauth_local_webserver = True
         logging.info(args.__dict__)
         if not os.path.exists(args.file):
             exit("Please specify a valid file using the --file= parameter.")

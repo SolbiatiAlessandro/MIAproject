@@ -42,6 +42,22 @@ COPY MIAcode/MIAutils/text_to_video/static ${AIRFLOW_HOME}/static
 # audio
 COPY MIAcode/MIAutils/text_to_video/tts/voicerss_key.json ${AIRFLOW_HOME}/voicerss_key.json
 
+# upload_translated_videos libraries
+COPY MIAcode/MIAutils/google_wrapper/requirements.txt ${AIRFLOW_HOME}/requirements_google_wrapper.txt
+RUN pip install -r requirements_google_wrapper.txt
+COPY MIAcode/MIAutils/google_wrapper/client_secrets.json ${AIRFLOW_HOME}/client_secrets.json
+RUN pip install -r requirements_google_wrapper.txt
+
+COPY MIAcode/MIAutils/google_wrapper/test_video.mp4 .
+
+# GOOGLE AUTH
+RUN pip install 'apache-airflow[google_auth]'
+# overwriting config with my config with google secrets
+COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+# read MIAdocs 1.3 for more info about this
+COPY access_token.json /usr/local/bin/airflow-oauth2.json
+
+
 # ---
 
 # LEAVE THIS AT THE END SO WHEN YOU CHANGE CODE IT DOES

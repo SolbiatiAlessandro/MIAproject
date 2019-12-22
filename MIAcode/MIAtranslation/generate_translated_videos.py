@@ -30,14 +30,18 @@ def generate_translated_videos(**kwargs) -> List[MiaScript]:
 
     for i, miascript in enumerate(miascripts):
         logging.info("starting video generation for video {}/{}".format(
-            i, len(miascripts)))
+            i+1, len(miascripts)))
+        miascript._debug()
 
+        # generate audio
         assert(miascript.video_text_filename, "Trying to generate the audio, the path of the text file was not found")
         assert(miascript.video_name, "Trying to create audio filename")
         filepath_audio = generate_mp3(miascript.video_text_filename, miascript.video_name)
         miascript.set_audio_filename(filepath_audio)
+        logging.info("audio generated succesfully")
 
-        # in my case is doing it inside
+        # generate video
         generate_video_from_mp4(miascript)
+        logging.info("video generated succesfully")
 
     return miafilter(miascripts, 'video_filename')
