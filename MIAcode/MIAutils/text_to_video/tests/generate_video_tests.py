@@ -22,7 +22,7 @@ def videoclip_no_audio(video_filename, text_title):
 
 def test_videoclip_no_audio_short():
     video_filename = "test_videoclip_no_audio_short.mp4"
-    videoclip_no_audio(video_filename, "Short")
+    videoclip_no_audio(video_filename, "ABCD")
     assert True
 
 def test_videoclip_no_audio_medium():

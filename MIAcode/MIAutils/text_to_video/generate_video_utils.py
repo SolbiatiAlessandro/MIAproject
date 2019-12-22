@@ -29,7 +29,9 @@ def generate_image_filename() -> str:
     random_suffix = int(random()*10%NUMBER_OF_IMAGES) + 1
     return os.path.join("static","_mia"+str(random_suffix)+".jpg")
 
-MASK_COLOR = (0,0,0)
+# this is the mask color that later is removed
+# so that we can achieve transparency
+MASK_COLOR = (0,0,0) 
 FONT_PATH = "./static/Typo Draft Demo.otf"
 
 def generate_text_png(
@@ -42,6 +44,12 @@ def generate_text_png(
         h=800,
         margin=50,
         ):
+    """
+    this method generates static .png image with title text
+    to be resued later by moviepy: we need to do this because
+    the fx.color_mask filter works only with static images and
+    not with clips, so cant' use TextClip
+    """
     logging.info("generating text .png image for text = "+str(text))
     "Draw a text on an Image, saves it, show it"
 
@@ -51,7 +59,10 @@ def generate_text_png(
     draw = ImageDraw.Draw(image)
     # draw text
 
-    """ not wrapping text
+    """ 
+    currently decided not to wrap text in multiline
+    this is the code to do it:
+
     # https://stackoverflow.com/questions/8257147/wrap-text-in-pil
     wrapped_text = textwrap.wrap(text, width=10)
     logging.info("wrapping text")
@@ -74,8 +85,11 @@ def _get_text_size(text: str, w: float, margin: int) -> int:
     we are using a monospaced font so we can automatically resize
     it to fit exactly the width of the image
     FONT_PATH = "/Users/alex/Downloads/typo-draft/Typo Draft Demo.otf"
+
+    to change font: select a monospace font and figure out a good 
+    h_w_proportion ratio below for the font
     """
-    # character are rectangles with h:w=6:5
+    # character are rectangles with this proportion
     h_w_proportion = 0.73
     # margin + text_size * h_w_proportion * len(text) + margin == w
     text_size = (w - (2 * margin))/(len(text) * h_w_proportion)
@@ -86,45 +100,30 @@ def _videoclip(
         title_text: str
         ) -> CompositeVideoClip:
     """
-    generate a videoclip with background image and a text
+    generate a videoclip with background image and a text title,
+    text title is with transparent background and resizes automatically
+    (see _
     """
     logging.info('generating videoclip')
     image = ImageClip(image_filename)
-    #image = ColorClip((800,600), color=(255,0,255))
-    w, h = image.w, image.h
+    w, h, margin = image.w, image.h, 50
 
-    """
-    text_title = (
-                TextClip(title_text.upper(),
-                    fontsize=400,
-                    font="Georgia",
-                    color="white",
-                    bg_color='green',
-                    #method='label',
-                    )
-                .set_position((0, 0.61), relative=True)
-                .resize(width=w)
-                )
-    #text_title.save_frame(text_title_image_path, 0)
-    """
     text_title_image_path = title_text+".png"
-    margin = 50
     text_size = _get_text_size(title_text, w, margin)
 
     assert generate_text_png(
         filename=text_title_image_path,
         text=title_text,
         size=text_size,
-        color=(255,255,255), 
-        bg=MASK_COLOR,
+        color=(255,255,255), # font color: white
+        bg=MASK_COLOR, # this bg color get cut by the mask later
         w=w,
         h=h
-        )
+        ), "something broke in generating .png static image"
     
     text_title_image = ImageClip(text_title_image_path)
+    # this applies the mask so that we can get text transparency
     masked_text_title_image = mask_color(text_title_image, color=MASK_COLOR)
-
-    #masked_text_title = mask_color(text_title, color=[0,255,1]) # for green
 
     video = CompositeVideoClip([image, masked_text_title_image], use_bgclip=True)
     return video
@@ -133,7 +132,8 @@ def generate_video_from_mp4(miascript: MiaScript) -> None:
     """
     given a `miascript` dictionary with at least:
     - miascript.audio_filename
-    - miascript.imges
+    - miascript.video_name, "you need a video_name to add in the thumbnail"
+    - miascript.video_long_name, "you need a video_long_name to save video for video full title"
 
     generates a video and set it on the MiaScript
     """
