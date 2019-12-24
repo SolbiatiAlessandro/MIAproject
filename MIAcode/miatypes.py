@@ -101,14 +101,14 @@ def get_miascripts_dict() -> Dict[uuid4, MiaScript]:
     """
     returns miascripts dict indexed on miascript.script_id (pickle)
     """
+    miascripts_dict = {}
     try:
         miascripts_dict: Dict[uuid4, MiaScript] = pkl.load(
                 open(pickle_miascript_dict_path(), "rb"))
     except IOError as e:
-        logging.warning("no miascript_dict found at {}".format(
+        logging.warning("no miascripts_dict found at {}".format(
             pickle_miascript_dict_path()))
         logging.warning(e)
-        miascript_dict = {}
     return miascripts_dict
 
 def dump_to_miascripts_dict(
