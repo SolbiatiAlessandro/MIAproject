@@ -1,0 +1,37 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:9.6"
+    container_name: "postgres"
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  webserver:
+      build: .
+      restart: always
+      depends_on:
+          - postgres
+      environment:
+          - EXECUTOR=Local
+          - FERNET_KEY=Ic2DkmSUQFoBpa_zKZP_z0DDBY8vE0eZb_gAZlf4lhc=
+          - AIRFLOW__CORE__FERNET_KEY=Ic2DkmSUQFoBpa_zKZP_z0DDBY8vE0eZb_gAZlf4lhc=
+          - POSTGRES_HOST=postgres
+          - POSTGRES_PORT=5432
+          - POSTGRES_PASSWORD=airflow
+          - POSTGRES_DB=airflow
+          - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      ports:
+          - "8080:8080"
+      volumes:
+          - ./output__youtube_translation_encyclopedia:/output__youtube_translation_encyclopedia
+      command: webserver   # I start webserver manually later, but it might be enough to uncomment this line 
+      healthcheck:
+          test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+          interval: 30s
+          timeout: 30s
+          retries: 3

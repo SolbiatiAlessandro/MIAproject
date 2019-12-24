@@ -10,7 +10,7 @@ from typing import List
 from MIAutils.google_wrapper.upload_video_wrapper \
         import wrapper as uploader
 from random import random
-from youtube_translation_encyclopedia import dump_to_miascripts_dict
+from miatypes import dump_to_miascripts_dict
 
 def _test_operator(**kwargs):
     """
@@ -56,7 +56,7 @@ def _operator(miascripts: List[MiaScript]) -> None:
         # there might be time when it does not upload
         # but still get positive response
 
-        miascript.upload_outcome = reponse
+        miascript.set_upload_outcome = bool(response)
         uploaded_videos += response
 
         # save this miascript in persistent memory
@@ -73,9 +73,8 @@ def upload_translated_videos(**kwargs):
             key=None, 
             task_ids='generate_translated_videos') 
     logging.info("retrieved {} miascripts from xcom_pull".\
-            format(len(miascripts))
-    miascripts[0]._debug()
-    miascripts[-1]._debug()
+            format(len(miascripts)))
+    if miascripts: miascripts[0]._debug()
 
     uploaded_videos = _operator(miascripts)
     logging.info("uploaded {} videos".format(uploaded_videos))
@@ -89,9 +88,8 @@ def reupload_videos(**kwargs):
             key=None, 
             task_ids='collect_videos_not_uploaded') 
     logging.info("retrieved {} miascripts from xcom_pull".\
-            format(len(miascripts))
-    miascripts[0]._debug()
-    miascripts[-1]._debug()
+            format(len(miascripts)))
+    if miascripts: miascripts[0]._debug()
 
     uploaded_videos = _operator(miascripts)
     logging.info("uploaded {} videos".format(uploaded_videos))

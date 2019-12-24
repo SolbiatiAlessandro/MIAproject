@@ -57,6 +57,24 @@ COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 # read MIAdocs 1.3 for more info about this
 COPY access_token.json /usr/local/bin/airflow-oauth2.json
 
+# ---
+# POSTGRES 
+RUN pip install psycopg2-binary
+ENV POSTGRES_HOST localhost
+ENV POSTGRES_PORT 5432
+ENV POSTGRES_USER airflow
+ENV POSTGRES_PASSWORD airflow
+ENV POSTGRES_DB airflow
+
+# also added lines to airflow.cfg
+# sql_alchemy_conn = postgresql+psycopg2://airflow_user:airflow_user22122019@postgres:5432/airflow_db
+
+# I try to connect to postgres and I get this error
+# https://github.com/puckel/docker-airflow/issues/290
+# this export does not work
+# looks like I can solve it like here
+# https://github.com/puckel/docker-airflow/issues/298
+ENV AIRFLOW__CORE__FERNET_KEY $(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")
 
 # ---
 
@@ -73,4 +91,3 @@ COPY MIAcode ${AIRFLOW_HOME}/dags
 # need this for hardcoded import in DOCS
 COPY MIAcode ${AIRFLOW_HOME}/MIAcode
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bash"]

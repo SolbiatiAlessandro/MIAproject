@@ -33,7 +33,7 @@ default_args = {
 with DAG('_test_youtube_translation_encyclopedia',
          catchup=False,
          default_args=default_args,
-         schedule_interval='0 * * * *', # every minute
+         schedule_interval=None,
          ) as dag:
 
     opr_test_upload_translated_videos = PythonOperator(

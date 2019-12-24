@@ -22,27 +22,6 @@ from MIAtranslation.translate_scripts import translate_scripts
 from MIAtranslation.generate_translated_videos import generate_translated_videos
 from MIAtranslation.upload_translated_videos import upload_translated_videos
 
-MIASCIPTS_DICT = "youtube_translation_encyclopedia__miascripts_dict"
-OUTPUT_FOLDER = "./output__youtube_translation_encyclopedia"
-
-def get_miascripts_dict() -> Dict[uuid4, MiaScript]:
-    """
-    returns miascripts dict indexed on miascript.script_id
-    """
-    miascripts_dict: Dict[uuid4, MiaScript] = Variable.get(
-            MIASCIPTS_DICT, default_var={})
-    return miascripts_dict
-
-def dump_to_miascripts_dict(miascripts: List[MiaScript]):
-    """
-    dump miascripts to persistent memory
-    """
-    logging.info('dumping {} miascripts'.format(len(miascripts)))
-    miascripts_dict = get_miascripts_dict()
-    for miascript in miascripts:
-        miascript._debug()
-        miascripts_dict[miascripts.script_id] = miascript
-    Variable.set(MIASCIPTS_DICT, miascripts_dict)
 
 def set_variable(variable_key, variable_val):
     """
@@ -71,7 +50,7 @@ default_args = {
 with DAG('youtube_translation_encyclopedia',
          catchup=False,
          default_args=default_args,
-         schedule_interval='Never', # every minute
+         schedule_interval=None,
          ) as dag:
 
     ## SET VARIABLES (alex) I am not sure if this is the right place

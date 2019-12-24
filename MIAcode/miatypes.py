@@ -3,10 +3,15 @@ typing for mia, used in video generation
 """
 import logging
 import os
-from typing import NamedTuple, List
+from typing import NamedTuple, List, Dict
 from uuid import uuid4
 from datetime import datetime
 from pprint import pformat
+from airflow.models import Variable
+import json
+
+# now we only have this DAG: youtube_translation_encyclopedia
+MIASCIPTS_DICT = "youtube_translation_encyclopedia__miascripts_dict"
 
 class MiaScript():
     """
@@ -90,6 +95,28 @@ class MiaScript():
         True: success
         """
         self.upload_outcome = upload_outcome
+
+def get_miascripts_dict() -> Dict[uuid4, MiaScript]:
+    """
+    returns miascripts dict indexed on miascript.script_id
+    """
+    miascripts_dict: Dict[uuid4, MiaScript] = Variable.get(
+            MIASCIPTS_DICT, default_var={})
+    return miascripts_dict
+
+def dump_to_miascripts_dict(
+        miascripts: List[MiaScript],
+        ):
+    """
+    dump miascripts to persistent memory
+    """
+    logging.info('dumping {} miascripts'.format(len(miascripts)))
+    miascripts_dict = get_miascripts_dict()
+    for miascript in miascripts:
+        miascript._debug()
+        miascripts_dict[miascript.script_id] = miascript
+    Variable.set(MIASCIPTS_DICT, miascripts_dict)
+
 
 def miafilter(
         miascripts: List[MiaScript], 

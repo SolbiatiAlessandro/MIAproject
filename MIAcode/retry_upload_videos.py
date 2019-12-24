@@ -17,8 +17,9 @@ AIRFLOW_HOME = "/usr/local/airflow/"
 sys.path.append(os.path.join(AIRFLOW_HOME, "MIAtranslation"))
 sys.path.append("../")
 from MIAtranslation.upload_translated_videos import reupload_videos
-from miatypes import MIASCIPTS_VARIABLE, MiaScript
-from youtube_translation_encyclopedia import get_miascripts_dict
+from typing import List
+from miatypes import MiaScript, get_miascripts_dict
+import logging
 
 default_args = {
     'owner': 'alessandro',
@@ -48,10 +49,10 @@ def collect_videos_not_uploaded(**kwargs) -> List[MiaScript]:
             format(len(miascripts_retry_upload)))
     return miascripts_retry_upload
 
-with DAG('_test_youtube_translation_encyclopedia',
+with DAG('retry_upload_videos',
          catchup=False,
          default_args=default_args,
-         schedule_interval='daily', 
+         schedule_interval='0 0 20 * * *', 
          ) as dag:
     opr_collect_videos_not_uploaded = PythonOperator(
             task_id='collect_videos_not_uploaded',
