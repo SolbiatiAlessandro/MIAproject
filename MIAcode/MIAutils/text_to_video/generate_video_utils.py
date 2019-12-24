@@ -13,9 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import logging
 import os
-
-# this is a shared volume with docker
-OUTPUT_FOLDER = "/output__youtube_translation_encyclopedia"
+from miaconfig import OUTPUT_FOLDER
 
 def generate_video_filename(video_name: str) -> str:
     """

@@ -3,15 +3,13 @@ typing for mia, used in video generation
 """
 import logging
 import os
+import pickle as pkl
 from typing import NamedTuple, List, Dict
 from uuid import uuid4
 from datetime import datetime
 from pprint import pformat
 from airflow.models import Variable
-import json
-
-# now we only have this DAG: youtube_translation_encyclopedia
-MIASCIPTS_DICT = "youtube_translation_encyclopedia__miascripts_dict"
+from miaconfig import OUTPUT_FOLDER, yte_MIASCIPTS_DICT
 
 class MiaScript():
     """
@@ -96,27 +94,35 @@ class MiaScript():
         """
         self.upload_outcome = upload_outcome
 
+def pickle_miascript_dict_path():
+    return os.path.join(OUTPUT_FOLDER, yte_MIASCIPTS_DICT+".pkl")
+
 def get_miascripts_dict() -> Dict[uuid4, MiaScript]:
     """
-    returns miascripts dict indexed on miascript.script_id
+    returns miascripts dict indexed on miascript.script_id (pickle)
     """
-    miascripts_dict: Dict[uuid4, MiaScript] = Variable.get(
-            MIASCIPTS_DICT, default_var={})
+    try:
+        miascripts_dict: Dict[uuid4, MiaScript] = pkl.load(
+                open(pickle_miascript_dict_path(), "rb"))
+    except IOError as e:
+        logging.warning("no miascript_dict found at {}".format(
+            pickle_miascript_dict_path()))
+        logging.warning(e)
+        miascript_dict = {}
     return miascripts_dict
 
 def dump_to_miascripts_dict(
         miascripts: List[MiaScript],
         ):
     """
-    dump miascripts to persistent memory
+    dump miascripts to persistent memory (pickle)
     """
     logging.info('dumping {} miascripts'.format(len(miascripts)))
     miascripts_dict = get_miascripts_dict()
     for miascript in miascripts:
         miascript._debug()
         miascripts_dict[miascript.script_id] = miascript
-    Variable.set(MIASCIPTS_DICT, miascripts_dict)
-
+    pkl.dump(miascripts_dict, open(pickle_miascript_dict_path(), "wb"))
 
 def miafilter(
         miascripts: List[MiaScript], 

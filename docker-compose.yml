@@ -28,7 +28,7 @@ services:
       ports:
           - "8080:8080"
       volumes:
-          - ./output__youtube_translation_encyclopedia:/output__youtube_translation_encyclopedia
+          - ./miaoutput/yte:/miaoutput/yte
       command: webserver   # I start webserver manually later, but it might be enough to uncomment this line 
       healthcheck:
           test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
