@@ -1,5 +1,5 @@
 import pytest
-from generate_wiki_text import generate_wiki_text
+from generate_wiki_text import generate_wiki_text, get_spanish_title
 from title_to_keyword import title_to_keyword
 import os
 
@@ -40,3 +40,10 @@ def test_generate_sp_script_files_from_en_video_titles_no_wiki_pages():
                                                                                   
     assert len(translated_video_scripts_filenames) == 2                            
     assert translated_video_scripts_filenames == [None, None]
+
+def test_get_spanish_title():
+    keyword = 'Entrepreneurship'
+
+    answear = get_spanish_title(keyword)
+    expected_answear = '¿Qué es Emprendimiento? Significado y definición'
+    assert answear == expected_answear
