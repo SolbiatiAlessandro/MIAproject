@@ -57,7 +57,9 @@ def generate_wiki_text(input_keyword: str) -> None:
         return
 
     page_py_es = page_py.langlinks['es']
-    translated_text = page_py_es.summary
+    raw_translated_text = page_py_es.summary
+    import re
+    translated_text = re.sub(r'\[.*?\]', '', text)
 
     if page_py_es.sections:
         translated_text += page_py_es.sections[0].text
