@@ -66,7 +66,7 @@ def generate_wiki_text(input_keyword: str) -> None:
     import re
     translated_text = re.sub(r'\[.*?\]', '', translated_text)
 
-    intro = 'Hola, amigos! Soy Mia y estoy muy feliz de verte de nuevo aquí. Descubramos juntos la definición de ' + page_py_es.title + '. '
+    intro = 'Hola amigos! Soy Mia y estoy muy feliz de verte de nuevo aquí. Descubramos juntos la definición de ' + page_py_es.title + '. '
     outro = 'Gracias por mirar el video. Eres una persona genial! Te deseo un buen dia. Recuerda sonreír y disfrutar tu día. No olvides suscribirte para approvechar otros interesantes vídeos como este!'
 
     translated_text = intro + translated_text + outro
