@@ -57,19 +57,26 @@ def generate_wiki_text(input_keyword: str) -> None:
         return
 
     page_py_es = page_py.langlinks['es']
-    raw_translated_text = page_py_es.summary
-    import re
-    translated_text = re.sub(r'\[.*?\]', '', text)
+    translated_text = page_py_es.summary
 
     if page_py_es.sections:
         translated_text += page_py_es.sections[0].text
 
+    import re
+    translated_text = re.sub(r'\[.*?\]', '', translated_text)
+
+    intro = 'Hola, amigos! Soy Mia y estoy muy feliz de verte de nuevo aquí. Descubramos juntos la definición de ' + page_py_es.title + '. '
+    outro = 'Gracias por mirar el video. Eres una persona genial! Te deseo un buen dia. Recuerda sonreír y disfrutar tu día. Suscríbete si quieres volver a verte.'
+
+    translated_text = intro + translated_text + outro
     filepath = create_filepath(input_keyword)
     create_textfile(filepath, translated_text)
+
+    print(translated_text)
+
     return filepath
 
-    
-    print(translated_text)
+
 
 if __name__ == "__main__":
     print(generate_wiki_text('Entrepreneurship'))
