@@ -72,8 +72,11 @@ def generate_text_png(
         offset += fnt.getsize(line)[1]
     """
 
+    # additional botton margin to make text show in YT thumbnail
+    show_in_thumbnail = 100
+
     # offset is same from left (margin), same from bottom
-    offset = h - fnt.getsize(text)[1] - margin
+    offset = h - fnt.getsize(text)[1] - margin - show_in_thumbnail
     draw.text((margin, offset), text, font=fnt, fill=color)
 
     # save file
