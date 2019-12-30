@@ -24,8 +24,9 @@ def create_textfile(filepath: str, text: str) -> None:
     f.write(encoded_text)
     f.close()
     
-def get_spanish_title(input_keyword: str) -> str:
+def get_spanish_title(input_keyword: str) -> (str, str):
     """
+    return (youtube_short_title, youtube_long_title)
     """
     logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
     wiki_wiki = wikipediaapi.Wikipedia('en')
@@ -40,8 +41,9 @@ def get_spanish_title(input_keyword: str) -> str:
 
     page_py_es = page_py.langlinks['es']
 
-    youtube_title = '¿Qué es ' + page_py_es.title + '? Significado y definición'
-    return youtube_title
+    youtube_short_title = page_py_es.title
+    youtube_long_title = '¿Qué es ' + page_py_es.title + '? Significado y definición'
+    return (youtube_short_title, youtube_long_title)
 
 def generate_wiki_text(input_keyword: str) -> None:
     """
