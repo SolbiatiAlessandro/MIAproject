@@ -23,6 +23,12 @@ def create_textfile(filepath: str, text: str) -> None:
     encoded_text = (text).encode("utf-8")
     f.write(encoded_text)
     f.close()
+
+def get_spanish_description(input_keyword: str) -> (str, str):
+    """
+    """
+    logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
+    return 'Hola amigos! en este video nos enteramos' + get_spanish_title(input_keyword)[1]
     
 def get_spanish_title(input_keyword: str) -> (str, str):
     """

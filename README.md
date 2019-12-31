@@ -3,8 +3,9 @@
 
 ## COMMANDS
 ```
-docker build -t mia .
-docker run -p 8000:8000 -p 8080:8080 mia webserver
+docker-compose build webserver
+(if `docker ps` and postgres not running, `docker-compose up posgres`)
+docker-compose up webserver
 ```
 
 ## INFRA
