@@ -104,7 +104,8 @@ venv.bak/
 .mypy_cache/
 
 # secret keys
-*.json
+# *.json
+# we put them cause is a private repo
 
 #video
 *.mp4
