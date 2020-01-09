@@ -3,7 +3,7 @@
 generate wiki test module
 """
 import wikipediaapi
-from typing import Dict
+from typing import Dict, Tuple, Optional
 import logging
 import os
 
@@ -25,13 +25,14 @@ def create_textfile(filepath: str, text: str) -> None:
     f.write(encoded_text)
     f.close()
 
-def get_spanish_description(input_keyword: str) -> (str, str):
+def get_spanish_description(input_keyword: str) -> str:
     """
     """
     logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
-    return 'Hola amigos! en este video nos enteramos' + get_spanish_title(input_keyword)[1]
+    long_title = get_spanish_title(input_keyword)['youtube_long_title']
+    return ('Hola amigos! en este video nos enteramos' + long_title) if long_title else ''
     
-def get_spanish_title(input_keyword: str) -> Dict[str, str]:
+def get_spanish_title(input_keyword: str) -> Dict[str, Optional[str]]:
     """
     https://github.com/SolbiatiAlessandro/MIAproject/issues/4
     return {'youtube_short_title':.., 'youtube_long_title':..}
