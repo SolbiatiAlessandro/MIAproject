@@ -48,7 +48,7 @@ RUN pip install -r requirements_google_wrapper.txt
 COPY MIAcode/MIAutils/google_wrapper/client_secrets.json ${AIRFLOW_HOME}/client_secrets.json
 RUN pip install -r requirements_google_wrapper.txt
 
-COPY MIAcode/MIAutils/google_wrapper/test_video.mp4 .
+# COPY MIAcode/MIAutils/google_wrapper/test_video.mp4 .
 
 # GOOGLE AUTH
 RUN pip install 'apache-airflow[google_auth]'
