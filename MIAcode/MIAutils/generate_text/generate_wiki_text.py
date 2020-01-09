@@ -3,6 +3,7 @@
 generate wiki test module
 """
 import wikipediaapi
+from typing import Dict
 import logging
 import os
 
@@ -30,26 +31,32 @@ def get_spanish_description(input_keyword: str) -> (str, str):
     logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
     return 'Hola amigos! en este video nos enteramos' + get_spanish_title(input_keyword)[1]
     
-def get_spanish_title(input_keyword: str) -> (str, str):
+def get_spanish_title(input_keyword: str) -> Dict[str, str]:
     """
-    return (youtube_short_title, youtube_long_title)
+    https://github.com/SolbiatiAlessandro/MIAproject/issues/4
+    return {'youtube_short_title':.., 'youtube_long_title':..}
     """
     logging.warning("called get_spanish_title with input_keyword={}".format(input_keyword))
     wiki_wiki = wikipediaapi.Wikipedia('en')
     page_py = wiki_wiki.page(input_keyword)
 
+    titles = {
+            'youtube_short_title': None,
+            'youtube_long_title': None,
+            }
+
     if not page_py.title:
         logging.warning('Wikipedia page does not exist')
-        return
+        return titles
     if 'es' not in page_py.langlinks.keys(): 
         logging.warning('Wikipedia page does not have a spanish version')
-        return
+        return titles
 
     page_py_es = page_py.langlinks['es']
 
-    youtube_short_title = page_py_es.title
-    youtube_long_title = '¿Qué es ' + page_py_es.title + '? Significado y definición'
-    return (youtube_short_title, youtube_long_title)
+    titles['youtube_short_title'] = page_py_es.title
+    titles['youtube_long_title']  = '¿Qué es ' + page_py_es.title + '? Significado y definición'
+    return titles
 
 def generate_wiki_text(input_keyword: str) -> None:
     """

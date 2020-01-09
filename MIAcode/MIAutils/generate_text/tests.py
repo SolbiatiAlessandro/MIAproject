@@ -44,8 +44,8 @@ def test_generate_sp_script_files_from_en_video_titles_no_wiki_pages():
 def test_get_spanish_title():
     keyword = 'Entrepreneurship'
 
-    short_answer, long_answer = get_spanish_title(keyword)
+    titles = get_spanish_title(keyword)
     expected_long_answer = '¿Qué es Emprendimiento? Significado y definición'
-    assert long_answer == expected_long_answer
+    assert titles['youtube_long_title'] == expected_long_answer
     expected_short_answer = 'Emprendimiento'
-    assert short_answer == expected_short_answer
+    assert titles['youtube_short_title'] == expected_short_answer

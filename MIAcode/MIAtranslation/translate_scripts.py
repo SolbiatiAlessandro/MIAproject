@@ -31,7 +31,11 @@ def translate_scripts(**kwargs) -> List[MiaScript]:
         keyword_from_title = title_to_keyword(EN_title)
         video_script_name = generate_wiki_text(keyword_from_title)
 
-        ES_short_title, ES_long_title = get_spanish_title(keyword_from_title)
+        # the usage of this 'titles' dictionary is because of 
+        # https://github.com/SolbiatiAlessandro/MIAproject/issues/4
+        titles = get_spanish_title(keyword_from_title)
+        ES_short_title, ES_long_title = \
+                titles['youtube_long_title'], titles['youtube_short_title']
         ES_description = get_spanish_description(keyword_from_title)
 
         miascript.set_video_name(ES_short_title) # this is 'Emprendimiento'
